@@ -1,21 +1,22 @@
+# Do all the relevant imports
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-image = mpimg.imread('exit-ramp.jpg')
-plt.imshow(image)
+import numpy as np
+import cv2
 
-import cv2  #bringing in OpenCV libraries
-gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) #grayscale conversion
-plt.imshow(gray, cmap='gray')
+# Read in the image and convert to grayscale
+# Note: in the previous example we were reading a .jpg 
+# Here we read a .png and convert to 0,255 bytescale
+image = mpimg.imread('exit-ramp.jpg')
+gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 
 # Define a kernel size for Gaussian smoothing / blurring
-# Note: this step is optional as cv2.Canny() applies a 5x5 Gaussian internally
-kernel_size = 3
-blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size), 0)
+kernel_size = 3 # Must be an odd number (3, 5, 7...)
+blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
 
-# Define parameters for Canny and run it
-# NOTE: if you try running this code you might want to change these!
-low_threshold = 1
-high_threshold = 10
+# Define our parameters for Canny and run it
+low_threshold = 80
+high_threshold = 150
 edges = cv2.Canny(blur_gray, low_threshold, high_threshold)
 
 # Display the image
