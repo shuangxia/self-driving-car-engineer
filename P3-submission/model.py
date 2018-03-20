@@ -102,4 +102,4 @@ if __name__ == "__main__":
                                         validation_data=validation_generator, nb_val_samples=200, 
                                         nb_epoch=10, verbose=1)
 
-    model.save('model.h5')
+    model.save('model3.h5')
