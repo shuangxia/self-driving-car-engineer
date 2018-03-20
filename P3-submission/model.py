@@ -98,8 +98,8 @@ if __name__ == "__main__":
     model = nvidia_model(summary=False)
     model.compile(optimizer='adam', loss='mse')
 
-    model.fit_generator(train_generator, samples_per_epoch=2000, 
-                                        validation_data=validation_generator, nb_val_samples=200, 
+    model.fit_generator(train_generator, samples_per_epoch=len(train_samples), 
+                                        validation_data=validation_generator, nb_val_samples=len(validation_samples), 
                                         nb_epoch=10, verbose=1)
 
     model.save('model3.h5')
