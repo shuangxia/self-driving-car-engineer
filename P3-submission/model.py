@@ -15,8 +15,8 @@ CONFIG = {
     'input_width': 320,
     'input_height': 160,
     'input_channels': 3,
-    'correction': 0.2,
-    'cropping': ((60,25), (0,0))
+    'correction': 0.15,
+    'cropping': ((50,20), (0,0))
 }
 
 def load_and_split_data(data_path, test_size=0.2):
@@ -40,28 +40,31 @@ def generator(samples, img_path, side_camera=False, augment_data=False, batch_si
                 steering_center = float(steering)
                 center_image = cv2.imread(os.path.join(img_path, center.strip()))
                 
-                images.append(center_image)
-                angles.append(steering_center)
+                #images.append(center_image)
+                #angles.append(steering_center)
                 
                 if side_camera:
-                    r = random.choice([0,1])
+                    r = random.choice([0,1,2])
                     if r ==0:
-                        steering_left = steering_center + CONFIG['correction']
-                        left_image = cv2.imread(os.path.join(img_path, left.strip()))
-                        images.append(left_image)
-                        angles.append(steering_left)
+                        angle = steering_center + CONFIG['correction']
+                        image = cv2.imread(os.path.join(img_path, left.strip()))
+                    elif r==2:
+                        angle = steering_center
+                        image = cv2.imread(os.path.join(img_path, center.strip()))
                     else:
-                        steering_right = steering_center - CONFIG['correction']
-                        right_image = cv2.imread(os.path.join(img_path, right.strip()))
-                        images.append(right_image)
-                        angles.append(steering_right)
-                        
-            if augment_data:
-                images_copy = images.copy()
-                angles_copy = angles.copy()
-                for image, angle in zip(images_copy, angles_copy):
+                        angle = steering_center - CONFIG['correction']
+                        image = cv2.imread(os.path.join(img_path, right.strip()))
+                else:
+                    angle = steering_center
+                    image = cv2.imread(os.path.join(img_path, center.strip()))
+
+                images.append(image)
+                angles.append(angle)
+
+                if augment_data:
                     images.append(cv2.flip(image, 1))
                     angles.append(angle*-1.0)
+
 
             X_train = np.array(images)
             y_train = np.array(angles)
@@ -102,4 +105,4 @@ if __name__ == "__main__":
                                         validation_data=validation_generator, nb_val_samples=len(validation_samples), 
                                         nb_epoch=10, verbose=1)
 
-    model.save('model3.h5')
+    model.save('model4.h5')
