@@ -78,7 +78,13 @@ The architecture is adapted from the NVIDIA network architecture, with two dropo
 
 #### 2. Creation of the Training Set 
 
-I used the training set provided by the course. I noticed that a lot of the time the car was heading straight ahead with the steering angle being 0. To add more training cases to the set I selected images from the left and right camera, treating them as they are from the the centre camera and modify the steering angle by add/substracting a correction of 0.2.
+I used the training set provided by the course. 
+
+##### use side camera
+
+I noticed that a lot of the time the car was heading straight ahead with the steering angle being 0. To add more training cases to the set I selected images from the left and right camera, treating them as they are from the the centre camera and modify the steering angle by add/substracting a correction of 0.2.
+
+##### add augamentation
 
 I also applied image augamentation by flipping the images to simulate the anti-clockwise driving on the same track.
 
