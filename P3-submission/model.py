@@ -38,25 +38,21 @@ def generator(samples, img_path, side_camera=False, augment_data=False, batch_si
                 center, left, right, steering, throttle, brake, speed = batch_sample
                 
                 steering_center = float(steering)
-                center_image = cv2.imread(os.path.join(img_path, center.strip()))
-                
-                #images.append(center_image)
-                #angles.append(steering_center)
-                
+
                 if side_camera:
                     r = random.choice([0,1,2])
                     if r ==0:
                         angle = steering_center + CONFIG['correction']
-                        image = cv2.imread(os.path.join(img_path, left.strip()))
+                        image = cv2.cvtColor(cv2.imread(os.path.join(img_path, left.strip())), cv2.COLOR_BGR2RGB)
                     elif r==2:
                         angle = steering_center
-                        image = cv2.imread(os.path.join(img_path, center.strip()))
+                        image = cv2.cvtColor(cv2.imread(os.path.join(img_path, center.strip())), cv2.COLOR_BGR2RGB)
                     else:
                         angle = steering_center - CONFIG['correction']
-                        image = cv2.imread(os.path.join(img_path, right.strip()))
+                        image = cv2.cvtColor(cv2.imread(os.path.join(img_path, right.strip())), cv2.COLOR_BGR2RGB)
                 else:
                     angle = steering_center
-                    image = cv2.imread(os.path.join(img_path, center.strip()))
+                    image = cv2.cvtColor(cv2.imread(os.path.join(img_path, center.strip())), cv2.COLOR_BGR2RGB)
 
                 images.append(image)
                 angles.append(angle)
@@ -81,9 +77,9 @@ def nvidia_model(summary=True):
     model.add(Convolution2D(64,3,3, activation='relu'))
     model.add(Flatten())
     model.add(Dense(100))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.8))
     model.add(Dense(50))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.8))
     model.add(Dense(10))
     model.add(Dense(1))
 
@@ -105,4 +101,4 @@ if __name__ == "__main__":
                                         validation_data=validation_generator, nb_val_samples=len(validation_samples), 
                                         nb_epoch=10, verbose=1)
 
-    model.save('model4.h5')
+    model.save('model_0321.h5')
