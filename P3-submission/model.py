@@ -16,6 +16,7 @@ CONFIG = {
     'input_height': 160,
     'input_channels': 3,
     'correction': 0.15,
+    #'correction': 0.2,
     'cropping': ((50,20), (0,0))
 }
 
@@ -79,7 +80,7 @@ def nvidia_model(summary=True):
     model.add(Dense(100))
     model.add(Dropout(0.8))
     model.add(Dense(50))
-    model.add(Dropout(0.8))
+    #model.add(Dropout(0.8))
     model.add(Dense(10))
     model.add(Dense(1))
 
@@ -95,10 +96,11 @@ if __name__ == "__main__":
     validation_generator = generator(validation_samples, img_path='./data/data', batch_size=CONFIG['batchsize'])
 
     model = nvidia_model(summary=False)
-    model.compile(optimizer='adam', loss='mse')
+    model.compile(optimizer='adam', loss='mae')
+    #model.compile(optimizer-'adam', loss='mse')
 
     model.fit_generator(train_generator, samples_per_epoch=len(train_samples), 
                                         validation_data=validation_generator, nb_val_samples=len(validation_samples), 
-                                        nb_epoch=10, verbose=1)
+                                        nb_epoch=10, verbose=1) #nb_epoch=20
 
-    model.save('model_0321.h5')
+    model.save('model.h5')
