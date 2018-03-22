@@ -52,7 +52,9 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. Architecture Design Approach
 
-I started the NVIDIA network architecture, as previous work has shown good performance. The model consists of five convolutional layers followed by three fully connected layers. I added a cropping layer at the very front to crop off the top and bottom part of images, to keep only the part where it shows the road.
+I started the NVIDIA network architecture, as previous work has shown good performance. The model consists of five convolutional layers with proper filters followed by three fully connected layers. 
+
+I added a Lambda layer at the beginning to normalise the data, and a cropping layer to crop off the top and bottom part of images, keeping only the part where it shows the road.
 
 #### 2. Avoid overfitting
 
