@@ -15,10 +15,10 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./model_architecture.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
+[image2]: ./example_center_camera.png "Center Camera"
+[image3]: ./example_left_camera.png "Left Camera"
+[image4]: ./example_right_camera.png "Right Camera"
+[image5]: ./example_flipped_image.png "Flipped Image"
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
@@ -50,35 +50,31 @@ The model.py file contains the code for training and saving the convolution neur
 
 ### Model Architecture and Training Strategy
 
-#### 1. An appropriate model architecture has been employed
+#### 1. Architecture Design Approach
 
-I adopted NVIDIA CNN architecture with extra dropout layers. 
+I started the NVIDIA network architecture, as previous work has shown good performance. The model consists of five convolutional layers followed by three fully connected layers. I added a cropping layer at the very front to crop off the top and bottom part of images, to keep only the part where it shows the road.
 
-#### 2. Attempts to reduce overfitting in the model
+#### 2. Avoid overfitting
 
-The model contains two dropout layers in order to reduce overfitting.
+The first training suggested overfitting, given the validation loss was much higher than the training loss. To avoid overfitting, I added one dropout layer with a drop rate of 0.5 after each of the first two fully connected layers. It turned out that the model was not overfitting anymore but with a tradeoff of accuracy. It seemed that the dropout was too strong.
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+![Initial Model Overview][image1]
+
+I then tried to use a lower dropout rate (0.8) and also by removing one of the dropout layer. After a couple of trials, I settled the model with one dropout layer after the first FC layer with a rate of 0.8 as it showed the best validation score.
 
 #### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually.
 
-#### 4. Appropriate training data
+After reading some comments on the choice of optimizer, I tried out a different loss function. Instead of MSE I used MAE and it turned out to improve the performance a bit more. MSE penalise larger errors more while MAE penalise errors equally. It's probably a more appropriate metrics in this case. 
 
-Training data was chosen to keep the vehicle driving on the road. I used the data provided by the project, which contains images from left, right and centre cameras.
+The ideal number of epochs was about 7-10 as after that the validation error would start increasing again. 
 
-### Model Architecture and Training Strategy
+### Creation of the Training Set 
 
-#### 1. Solution Design Approach
+I used the data provided by the project, which contains images from left, right and centre cameras.
 
-The architecture is adapted from the NVIDIA network architecture, with two dropout layers between the fully connected layers to avoid overfitting.
-
-![Model Overview][image1]
-
-#### 2. Creation of the Training Set 
-
-I used the training set provided by the course. 
+![Left Camera][image3]![Center Camera][image2]![Right Camera][image4]
 
 ##### use side camera
 
@@ -88,6 +84,14 @@ I noticed that a lot of the time the car was heading straight ahead with the ste
 
 I also applied image augamentation by flipping the images to simulate the anti-clockwise driving on the same track.
 
+![Flipped Image][image5]
+
+##### cross validation
+
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was bout 5-7 as after that the validation error would start increasing again. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+### Run the model on Autonomous mode
+
+I first ran the car with default speed setting (9 MPH) and the car drove fine. I then started thinking "what if I increase the speed of car?". I checked the training data and saw that the speed of the car when the data was collected was about 20-30 MPH. I modified the file `drive.py` and used `set_speed` to set the speed to 20. At a faster speed the car still drove ok so that worked.
+
+Both videos included. 
