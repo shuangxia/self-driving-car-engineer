@@ -57,6 +57,8 @@ The code to do this is contained in function `slide_window`. I started with thre
 
 There are two ways on deciding how the window moves, either with an overlap ratio or define how many cells to step. For different sizes of windows, you'd want to define a different overlap ratio. I ended up using `cells_per_step` in the final pipeline as this is self-adjustable depending on the window size. 
 
+Here is an example of all the windows used in search. The search is constrained to area of interest only.
+
 ![alt text][image3]
 
 ### 4. Heatmap labels
