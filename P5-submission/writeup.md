@@ -47,11 +47,15 @@ I tried various combinations of parameters and settled with `YUV` and HOG parame
 
 ### 2. Train a classifier using the selected HOG features and color features.
 
+Features are scaled to zero mean and unit variance before training the classifier. I normalised the feature values using `scaler` provided in scikit learn. 
+
 I trained a linear SVM using the features I mentioned above. I split the dataset into 80% training and 20% testing. The reported accuracy on the test dataset is 99.2%. I also tried different `C` values for the SVM classifier to see if the regularization would make a difference. It doesn't seem to make much difference in this case so I stick with the default `C=1`.
 
 ### 3. Sliding Window Search.
 
-The code to do this is contained in function `slide_window`. I started with three different scales. This was decided depends on the rough sizes of the cars in the video far and close to the camera. There are two ways on deciding how the window moves, either with an overlap ratio or define how many cells to step. For different sizes of windows, you'd want to define a different overlap ratio.
+The code to do this is contained in function `slide_window`. I started with three different scales. This was decided depends on the rough sizes of the cars in the video far and close to the camera. 
+
+There are two ways on deciding how the window moves, either with an overlap ratio or define how many cells to step. For different sizes of windows, you'd want to define a different overlap ratio. I ended up using `cells_per_step` in the final pipeline as this is self-adjustable depending on the window size. 
 
 ![alt text][image3]
 
